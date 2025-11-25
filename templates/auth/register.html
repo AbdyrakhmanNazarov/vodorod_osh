@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block blocktitle %}Регистрация{% endblock %}
+
+{% block content %}
+<main>
+  <h1>Регистрация нового пользователя</h1>
+
+  <div class="container">
+    <div class="">
+      <form method="post" action="{% url 'register' %}">  <!-- ИСПРАВЛЕНО: было register_acc -->
+        {% csrf_token %}
+
+        <div class="" style="margin-bottom:15px; text-align:left;">
+          <label for="email">Электронная почта</label>
+          <input type="email" name="email" required>
+        </div>
+
+        <div class="" style="margin-bottom:15px; text-align:left;">
+          <label for="full_name">ФИО</label>
+          <input type="text" name="full_name" required>
+        </div>
+
+        <div class="" style="margin-bottom:15px; text-align:left;">
+          <label for="password">Пароль</label>
+          <input type="password" name="password" required>
+        </div>
+
+        <div class="" style="margin-bottom:15px; text-align:left;">
+          <label for="password2">Подтвердите пароль</label>
+          <input type="password" name="password2" required>
+        </div>
+
+        <div class="">
+          <input type="submit" value="Создать аккаунт" class="btn btn-primary">
+        </div>
+      </form>
+
+      <p>Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>  <!-- ИСПРАВЛЕНО: было login_acc -->
+
+      {% if messages %}
+        <div class="success-message">
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</main>
+{% endblock %}

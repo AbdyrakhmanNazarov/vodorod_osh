@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block blocktitle %}Контакты - VODOROD.OSH{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container">
+        <h1>Контакты</h1>
+        
+        <div class="contacts-content">
+            <div class="contact-info">
+                <h2>Наши контакты</h2>
+                
+                <div class="contact-item">
+                    <h3>Адрес</h3>
+                    <p>г. Ош, [Ваш адрес]</p>
+                </div>
+                
+                <div class="contact-item">
+                    <h3>Телефоны</h3>
+                    <p>+996 [Ваш номер]</p>
+                    <p>+996 [Ваш номер]</p>
+                </div>
+                
+                <div class="contact-item">
+                    <h3>Email</h3>
+                    <p>[Ваш email]</p>
+                </div>
+                
+                <div class="contact-item">
+                    <h3>Режим работы</h3>
+                    <p>Пн-Пт: 9:00 - 18:00</p>
+                    <p>Сб: 9:00 - 16:00</p>
+                    <p>Вс: Выходной</p>
+                </div>
+            </div>
+            
+            <div class="map-section">
+                <h2>Мы на карте</h2>
+                <div class="map-placeholder">
+                    [Здесь будет карта]
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

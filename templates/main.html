@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block blocktitle %}
+  {{ title }}
+{% endblock %}
+
+{% block content %}
+
+  <main>
+    <h2>Кыргызстан г. Ош</h2>
+    <p>Добро пожаловать в главную страницу VODOROD.OSH</p>
+
+    <div style="">
+    <a href="{% url 'our_clients' %}" class="btn btn-primary">Посмотреть автомобили наших клиентов</a>
+</div>
+
+    <div class="container"></div>
+  </main>
+{% endblock %}

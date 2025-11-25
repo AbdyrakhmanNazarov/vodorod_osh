@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block blocktitle %}Подача заявки{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container">
+        <h1>Подача новой заявки</h1>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div style="margin-bottom: 15px;">
+                <label for="id_car_brand">Марка машины:</label>
+                {{ form.car_brand }}
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label for="id_car_model">Модель машины:</label>
+                {{ form.car_model }}
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label for="id_car_year">Год выпуска:</label>
+                {{ form.car_year }}
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label for="id_engine_volume">Объем двигателя (л):</label>
+                {{ form.engine_volume }}
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label for="id_car_photo">Фото машины:</label>
+                {{ form.car_photo }}
+            </div>
+            
+            <div style="margin-bottom: 15px;">
+                <label for="id_description">Описание:</label>
+                {{ form.description }}
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <button type="submit" class="btn btn-primary">Подать заявку</button>
+                <a href="{% url 'user_dashboard' %}" class="btn btn-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+</main>
+{% endblock %}

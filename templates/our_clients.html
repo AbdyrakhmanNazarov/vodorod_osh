@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block blocktitle %}Наши клиенты - VODOROD.OSH{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container">
+        <h1>Наши клиенты</h1>
+        <p>Автомобили наших довольных клиентов</p>
+        
+        {% if applications %}
+            <div class="clients-grid">
+                {% for app in applications %}
+                <div class="client-card">
+                    {% if app.car_photo %}
+                        <img src="{{ app.car_photo.url }}" alt="{{ app.car_brand }} {{ app.car_model }}" class="car-image">
+                    {% else %}
+                        <div class="no-photo">
+                            <span>Нет фото</span>
+                        </div>
+                    {% endif %}
+                    
+                    <h3>{{ app.car_brand }} {{ app.car_model }}</h3>
+                    <p><strong>Год:</strong> {{ app.car_year }}</p>
+                    <p><strong>Двигатель:</strong> {{ app.engine_volume }} л</p>
+                    
+                    {% if app.description %}
+                        <p class="description">"{{ app.description }}"</p>
+                    {% endif %}
+                    
+                    <p class="date">
+                        Добавлено: {{ app.created_at|date:"d.m.Y" }}
+                    </p>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Пагинация -->
+            {% if page_obj.has_other_pages %}
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">← Назад</a>
+                {% endif %}
+                
+                <span class="page-info">
+                    Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+                </span>
+                
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">Вперед →</a>
+                {% endif %}
+            </div>
+            {% endif %}
+            
+        {% else %}
+            <div class="no-cars">
+                <h3>Пока нет автомобилей для показа</h3>
+                <p>Скоро здесь появятся автомобили наших клиентов</p>
+            </div>
+        {% endif %}
+    </div>
+</main>
+{% endblock %}

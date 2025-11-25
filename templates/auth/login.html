@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block blocktitle %}Авторизация{% endblock %}
+
+{% block content %}
+<main style="display:flex; justify-content:center; align-items:center; min-height:80vh;">
+
+  <div class="container">
+    <h1 style="margin-bottom:20px;">Вход в систему</h1>
+
+    <form method="post" action="{% url 'login' %}">  <!-- ИСПРАВЛЕНО: было login_acc -->
+      {% csrf_token %}
+
+      <div class="" style="margin-bottom:15px; text-align:left;">
+        <label for="email">Электронная почта</label>  <!-- ИСПРАВЛЕНО: было username -->
+        <input type="email" name="email" required>  <!-- ИСПРАВЛЕНО: было username -->
+      </div>
+
+      <div class="" style="margin-bottom:20px; text-align:left;">
+        <label for="password">Пароль</label>
+        <input type="password" name="password" required>
+      </div>
+
+      <div class="">
+        <input type="submit" value="Войти" class="submit-btn">
+      </div>
+    </form>
+
+    <p style="margin-top:15px;">Нет аккаунта? <a href="{% url 'register' %}">Зарегистрироваться</a></p>  <!-- ИСПРАВЛЕНО: было register_acc -->
+
+    {% if messages %}
+      <div class="success-message" style="margin-top:15px; color:red; text-align:left;">
+        {% for message in messages %}
+          <p>{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+</main>
+{% endblock %}

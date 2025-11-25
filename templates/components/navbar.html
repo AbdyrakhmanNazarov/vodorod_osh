@@ -1,0 +1,29 @@
+{% load static %}
+<header>
+  <div class="container">
+    <div class="logo">
+      <a href="{% url 'main' %}"></a> 
+      <h1>VODOROD.OSH</h1>
+    </div>
+
+    <nav class="navigations">
+    <a href="{% url 'main' %}">Главная</a> 
+    <a href="{% url 'about' %}">О нас</a>        
+    <a href="{% url 'our_clients' %}">Наши клиенты</a>
+    <a href="{% url 'contacts' %}">Контакты</a>    
+    <a href="#">Новости</a>
+
+    {% if request.user.is_authenticated %}
+        {% if request.user.is_staff or request.user.is_superuser %}
+            <a href="/admin/">Администратор</a>
+        {% else %}
+            <a href="{% url 'user_dashboard' %}">Личный кабинет</a>
+        {% endif %}
+        <a href="{% url 'logout' %}">Выйти</a>
+    {% else %}
+        <a href="{% url 'register' %}">Регистрация</a>
+        <a href="{% url 'login' %}">Войти</a>
+    {% endif %}
+</nav>
+  </div>
+</header>

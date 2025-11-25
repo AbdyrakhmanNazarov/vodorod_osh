@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block blocktitle %}Удаление заявки{% endblock %}
+
+{% block content %}
+<main>
+    <div class="container">
+        <h1>Удаление заявки</h1>
+        
+        <p>Вы уверены, что хотите удалить заявку на автомобиль?</p>
+        <p><strong>Марка:</strong> {{ application.car_brand }}</p>
+        <p><strong>Модель:</strong> {{ application.car_model }}</p>
+        <p><strong>Год:</strong> {{ application.car_year }}</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div style="margin-top: 20px;">
+                <button type="submit" class="btn btn-danger">Да, удалить</button>
+                <a href="{% url 'user_dashboard' %}" class="btn btn-secondary">Отмена</a>
+            </div>
+        </form>
+    </div>
+</main>
+{% endblock %}
