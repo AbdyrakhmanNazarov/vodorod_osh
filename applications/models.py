@@ -1,6 +1,9 @@
 from django.db import models
 from accounts.models import User
 
+# class CarCategory(models.Model):
+    
+
 class CarApplication(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь")
     
@@ -9,7 +12,7 @@ class CarApplication(models.Model):
     car_year = models.PositiveIntegerField(verbose_name="Год выпуска")
     engine_volume = models.DecimalField(max_digits=3, decimal_places=1, verbose_name="Объем двигателя (л)")
     car_photo = models.ImageField(
-        upload_to='car_photos/%Y/%m/%d/',  # ИСПРАВЛЕН ПУТЬ
+        upload_to='car_photos/%Y/%m/%d/', 
         verbose_name="Фото машины", 
         blank=True, 
         null=True

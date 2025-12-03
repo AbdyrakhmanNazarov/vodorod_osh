@@ -2,12 +2,20 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import CarApplicationSerializer  
 from applications.models import CarApplication  
+from rest_framework.pagination import PageNumberPagination
 
 @api_view(['GET'])
 def cars_list(request):
-    applications = CarApplication.objects.all()  
-    serializer = CarApplicationSerializer(applications, many=True)
-    return Response(serializer.data)
+    # applications = CarApplication.objects.all()  
+    # serializer = CarApplicationSerializer(applications, many=True)
+    # return Response(serializer.data)
+
+    application = CarApplication.objects.all()
+    paginator = PageNumberPagination()
+    paginator.page_size = 3
+    result_page = paginator.paginate_queryset(application, request)
+    serializer = CarApplicationSerializer(result_page, many=True)
+    return paginator.get_paginated_response(serializer.data)
 
 @api_view(['POST'])
 def cars_create(request):

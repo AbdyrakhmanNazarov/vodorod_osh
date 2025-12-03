@@ -1,8 +1,10 @@
 from django.urls import path
-from .api import users_list, users_create, users_detail
+from .api import custom_login, custom_register, custom_logout, profile, change_password 
 
 urlpatterns = [
-    path('', users_list, name='users-list'),           
-    path('create/', users_create, name='users-create'), 
-    path('<int:pk>/', users_detail, name='users-detail'), 
+    path('login/', custom_login, name = 'login'),
+    path('register/', custom_register, name = 'register'),
+    path('logout/', custom_logout, name = 'logout'),
+    path('profile/', profile, name = 'profile'),
+    path('change_password/', change_password, name = 'change_password'),
 ]

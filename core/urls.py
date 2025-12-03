@@ -2,14 +2,11 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from accounts.views import main_view 
+# from accounts.views import main_view 
 
 urlpatterns = [
-    path("", main_view, name="main"),  
     path("admin/", admin.site.urls),
     path('api/', include('api.urls')),  
-    path("accounts/", include("accounts.urls")), 
-    path("applications/", include("applications.urls")),
 ]
 
 if settings.DEBUG:
