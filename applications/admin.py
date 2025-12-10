@@ -3,7 +3,7 @@ from .models import CarApplication, CarCategory
 
 @admin.register(CarApplication)
 class CarApplicationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'car_brand', 'car_model', 'car_year', 'status', 'created_at')
+    list_display = ('id', 'user', 'car_brand', 'car_model', 'car_year', 'status', 'created_at', 'category')
     list_display_links = ('id', 'car_brand')
     list_filter = ('status', 'car_year', 'created_at')
     search_fields = ('car_brand', 'car_model', 'user__email', 'user__full_name')
@@ -15,7 +15,7 @@ class CarApplicationAdmin(admin.ModelAdmin):
             'fields': ('user', 'status')
         }),
         ('Информация об автомобиле', {
-            'fields': ('car_brand', 'car_model', 'car_year', 'engine_volume', 'car_photo', 'description')
+            'fields': ('car_brand', 'car_model', 'car_year', 'engine_volume', 'car_photo', 'description', 'category')
         }),
         ('Даты', {
             'fields': ('created_at', 'updated_at'),

@@ -8,14 +8,14 @@ class CarCategorySerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class CarApplicationsListSerializer(serializers.ModelSerializer):
-    car_category = CarCategorySerializer(many=False)
+    category = CarCategorySerializer(many=False)
     class Meta:
         model = CarApplication
-        fields = ('id', 'user', 'car_brand', 'car_model', 'car_photo', 'car_category')
+        fields = ('id', 'user', 'car_brand', 'car_model', 'car_photo', 'category')
 
 
 class CarApplicationsDetailSerializer(serializers.ModelSerializer):
-    carcategory_name = serializers.CharField(source= 'car_category.object.name', read_only=True)
+    category = serializers.CharField(source= 'category.object.name', read_only=True)
     class Meta:
         model = CarApplication
         fields = "__all__"

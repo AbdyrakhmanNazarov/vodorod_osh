@@ -4,6 +4,9 @@ from accounts.models import User
 class CarCategory(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название категории")
 
+    def __str__(self):
+        return self.name 
+    
     class Meta:
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
@@ -17,7 +20,7 @@ class CarApplication(models.Model):
     car_model = models.CharField(max_length=100, verbose_name="Модель машины")
     car_year = models.PositiveIntegerField(verbose_name="Год выпуска")
     engine_volume = models.DecimalField(max_digits=3, decimal_places=1, verbose_name="Объем двигателя (л)")
-    category = models.ForeignKey(CarCategory, on_delete=models.CASCADE, default='', related_name='category', verbose_name='Категории')
+    category = models.ForeignKey(CarCategory, on_delete=models.CASCADE, default=None, related_name='car', verbose_name='Категория')
     car_photo = models.ImageField(
         upload_to='car_photos/%Y/%m/%d/', 
         verbose_name="Фото машины", 
