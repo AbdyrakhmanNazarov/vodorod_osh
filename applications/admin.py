@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import CarApplication
+from .models import CarApplication, CarCategory
 
 @admin.register(CarApplication)
 class CarApplicationAdmin(admin.ModelAdmin):
@@ -22,3 +22,8 @@ class CarApplicationAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+
+@admin.register(CarCategory)
+class CarCategoryAdmin(admin.ModelAdmin):
+    list_display = ("id", "name")
+    

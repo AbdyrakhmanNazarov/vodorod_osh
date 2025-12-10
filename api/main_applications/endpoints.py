@@ -1,8 +1,12 @@
-from django.urls import path
-from .api import cars_list, cars_create, cars_detail 
+from rest_framework.routers import DefaultRouter
+from .class_api import CarViewSet, CarCategoryViewSet
+from django.urls import path, include
+
+router=DefaultRouter()
+router.register('car-applications', CarViewSet, basename='car-applications')
+router.register('car-category', CarCategoryViewSet, basename='car-category')
+
 
 urlpatterns = [
-    path('cars-list/', cars_list, name='cars-list'),
-    path('cars-create/', cars_create, name='cars-create'),
-    path('cars-detail/<int:pk>/', cars_detail, name='cars-detail'),
-]
+    path('', include(router.urls))
+]   
