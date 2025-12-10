@@ -6,7 +6,6 @@ router=DefaultRouter()
 router.register('car-applications', CarViewSet, basename='car-applications')
 router.register('car-category', CarCategoryViewSet, basename='car-category')
 
-
 urlpatterns = [
     path('', include(router.urls))
 ]   

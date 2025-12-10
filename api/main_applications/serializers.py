@@ -1,18 +1,32 @@
 from rest_framework import serializers
 from applications.models import CarApplication, CarCategory
-from accounts.models import User
 
 class CarCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = CarCategory
         fields = "__all__"
 
+class CarCategoryListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CarCategory
+        fields = "__all__"
+
+class CarCategoryDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CarCategory
+        fields = "__all__"
+
+class CarCategoryCreateUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CarCategory
+        fields = "__all__"
+
+#====================================================================
 class CarApplicationsListSerializer(serializers.ModelSerializer):
     category = CarCategorySerializer(many=False)
     class Meta:
         model = CarApplication
         fields = ('id', 'user', 'car_brand', 'car_model', 'car_photo', 'category')
-
 
 class CarApplicationsDetailSerializer(serializers.ModelSerializer):
     category = serializers.CharField(source= 'category.object.name', read_only=True)
