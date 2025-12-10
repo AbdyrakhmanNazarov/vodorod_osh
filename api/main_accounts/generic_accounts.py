@@ -41,24 +41,39 @@ class LoginView(GenericAPIView):
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exeption=True)
+        serializer.is_valid(raise_exception=True)
         return Response(serializer.validated_data)
     
 class ChangePasswordView(GenericAPIView):
-    serializer_class = LoginSerializer
-    permission_classes = [AllowAny]
+    serializer_class = GenericChangePasswordSerializer
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = self.get_serializer(
             data=request.data,
-            context={'request':request}
+            context={'request': request}
         )
-
-        serializer.is_valid(raise_exeption=True)
-        request.user.set_password(serializer.validated_data['new_password'])
-        request.user.save()
-
-        return Response({"message":"Пароль успешно изменен"})
+        serializer.is_valid(raise_exception=True)
+        
+        # Проверка старого пароля
+        user = request.user
+        old_password = serializer.validated_data.get('old_password')
+        new_password = serializer.validated_data.get('new_password')
+        
+        if not user.check_password(old_password):
+            return Response(
+                {"error": "Старый пароль неверен"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        
+        # Установка нового пароля
+        user.set_password(new_password)
+        user.save()
+        
+        # Удаление токена для безопасности
+        Token.objects.filter(user=user).delete()
+        
+        return Response({"message": "Пароль успешно изменен"})
     
 class LogoutView(GenericAPIView):
     permission_classes = [IsAuthenticated]
@@ -73,7 +88,7 @@ class DeactivateAccountView(GenericAPIView):
 
     def post(self, request):
         serializer=self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exeption=True)
+        serializer.is_valid(raise_exception=True)
         if not serializer.validated_data['confirm']:
             return Response({"error":"Подтвердите деактивацию"})
         

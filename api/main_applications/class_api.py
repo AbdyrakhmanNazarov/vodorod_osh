@@ -48,5 +48,6 @@ class CarCategoryViewSet(ModelViewSet):
     
     def get_permissions(self):
         if self.action in ["create", "update", "partial_update", "delete"]:
-            return [IsAdminUser()]
+            return [IsAdminUser]
         return super().get_permissions()
+    
