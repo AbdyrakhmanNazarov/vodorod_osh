@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import User
+from django_resized import ResizedImageField
 
 class CarCategory(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название категории")
@@ -10,7 +11,6 @@ class CarCategory(models.Model):
     class Meta:
         verbose_name = "Категория"
         verbose_name_plural = "Категории"
-
 
 
 class CarApplication(models.Model):
@@ -46,3 +46,16 @@ class CarApplication(models.Model):
     
     def __str__(self):
         return f"{self.car_brand} {self.car_model} ({self.car_year}) - {self.user.email}"
+    
+
+class CarImage(models.Model):
+    car = models.ForeignKey(CarApplication, on_delete=models.CASCADE, related_name="images")
+    image = ResizedImageField(size=[800, 600], upload_to='cars_photo/', verbose_name="Изображения автомобиля", 
+                              blank=True, null=True, quality=90, crop=['middle', 'center'])
+    
+    class Meta:
+        verbose_name="Изображения автомобиля"
+        verbose_name_plural="Изображения автомобилей"
+
+    def __str__(self):
+        return f"Изображения для {self.car.car_brand}"

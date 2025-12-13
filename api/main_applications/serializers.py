@@ -6,21 +6,6 @@ class CarCategorySerializer(serializers.ModelSerializer):
         model = CarCategory
         fields = "__all__"
 
-class CarCategoryListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CarCategory
-        fields = "__all__"
-
-class CarCategoryDetailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CarCategory
-        fields = "__all__"
-
-class CarCategoryCreateUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CarCategory
-        fields = "__all__"
-
 #====================================================================
 class CarApplicationsListSerializer(serializers.ModelSerializer):
     category = CarCategorySerializer(many=False)
@@ -29,12 +14,12 @@ class CarApplicationsListSerializer(serializers.ModelSerializer):
         fields = ('id', 'user', 'car_brand', 'car_model', 'car_photo', 'category')
 
 class CarApplicationsDetailSerializer(serializers.ModelSerializer):
-    category = serializers.CharField(source= 'category.object.name', read_only=True)
+    category = serializers.CharField(source= 'category.name', read_only=True)
     class Meta:
         model = CarApplication
         fields = "__all__"
 
-class CarApplicatiuonsCreateUpdateSerializer(serializers.ModelSerializer):
+class CarApplicationsCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CarApplication
         fields = "__all__"                
