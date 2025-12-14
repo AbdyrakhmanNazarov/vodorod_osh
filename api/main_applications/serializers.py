@@ -9,6 +9,7 @@ class CarCategorySerializer(serializers.ModelSerializer):
 #====================================================================
 class CarApplicationsListSerializer(serializers.ModelSerializer):
     category = CarCategorySerializer(many=False)
+    
     class Meta:
         model = CarApplication
         fields = ('id', 'user', 'car_brand', 'car_model', 'car_photo', 'category')
