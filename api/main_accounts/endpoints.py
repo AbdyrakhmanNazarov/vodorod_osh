@@ -40,6 +40,7 @@ from .generic_accounts import (
     ChangePasswordView,
     # ActivateAccountView,
 )
+from .api import test_email_send
 
 urlpatterns = [
     path("login/", LoginView.as_view(), name="login"),
@@ -47,6 +48,7 @@ urlpatterns = [
     path("register/", RegisterView.as_view(), name="register"),
     path("profile/", ProfileView.as_view(), name="profile"),
     path("deactivate/", DeactivateAccountView.as_view(), name="deactivate"),
-    path("change_password/", ChangePasswordView.as_view(), name="change_password")
+    path("change_password/", ChangePasswordView.as_view(), name="change_password"),
     # path("activate/", ActivateView.as_view(), name="activate"),
+    path("email_test_sent/", test_email_send, name="email_test_sent")
 ]
