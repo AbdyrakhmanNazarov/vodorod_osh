@@ -1,20 +1,22 @@
-# Django
-*.log
-*.pot
-*.pyc
+# Python
 __pycache__/
-migrations/
+*.py[cod]
+*.log
+
+# Django
 *.sqlite3
 db.sqlite3
+staticfiles/
+media/
 
-# Environments
+# Environment variables
 .env
-.venv
-env/
+
+# Virtual environments
 venv/
+.venv/
+env/
 ENV/
-env.bak/
-venv.bak/
 
 # IDE
 .vscode/
@@ -22,10 +24,10 @@ venv.bak/
 *.swp
 *.swo
 
-# Static files
-staticfiles/
-media/
-
 # OS
 .DS_Store
 Thumbs.db
+
+# Django migrations (НЕ игнорируем полностью!)
+**/migrations/*.py
+!**/migrations/__init__.py

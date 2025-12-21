@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import (LoginSerializer, RegisterSerializer, ProfileSerializer, SendEmailSerializer)
+from .serializers import (LoginSerializer, RegisterSerializer, ProfileSerializer, SendEmailSerializer, GenericChangePasswordSerializer)
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authtoken.models import Token
 
@@ -50,11 +50,13 @@ def profile(request):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=200)
+    
+
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
 def change_password(request):
-    serializer = ChangePasswordSerializer(data=request.data, context={"request":request})
+    serializer = GenericChangePasswordSerializer(data=request.data, context={"request":request})
     serializer.is_valid(raise_exception=True)
     serializer.save()
     return Response({"detail":"Пароль успешно изменен"})

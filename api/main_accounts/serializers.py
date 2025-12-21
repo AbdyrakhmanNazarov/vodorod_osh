@@ -103,3 +103,17 @@ class SendEmailSerializer(serializers.Serializer):
 
         return validated_data
 
+
+class SendResetPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField(required = False)
+
+
+class VerifyPasswordResetOTPSerializer(serializers.Serializer):
+    email = serializers.EmailField(required = False)
+    code = serializers.CharField(max_length = 4)
+
+
+class ResetPasswordSerializer(serializers.Serializer):
+    email = serializers.EmailField(required = False)
+    code = serializers.CharField(max_length = 4)
+    new_password = serializers.CharField(write_only = True, min_length = 6)

@@ -39,6 +39,9 @@ from .generic_accounts import (
     DeactivateAccountView,
     ChangePasswordView,
     # ActivateAccountView,
+    RequestPasswordResetView,
+    VerifyPasswordResetOTPView,
+    ResetPasswordView,
 )
 from .api import test_email_send
 
@@ -50,5 +53,8 @@ urlpatterns = [
     path("deactivate/", DeactivateAccountView.as_view(), name="deactivate"),
     path("change_password/", ChangePasswordView.as_view(), name="change_password"),
     # path("activate/", ActivateView.as_view(), name="activate"),
-    path("email_test_sent/", test_email_send, name="email_test_sent")
+    path("email_test_sent/", test_email_send, name="email_test_sent"),
+    path('password-reset/request/', RequestPasswordResetView.as_view(), name='request-password-reset'),
+    path('password-reset/verify/', VerifyPasswordResetOTPView.as_view(), name='verify-password-reset'),
+    path('password-reset/complete/', ResetPasswordView.as_view(), name='complete-password-reset'),
 ]

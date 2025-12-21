@@ -1,3 +1,5 @@
+import random
+import requests
 from rest_framework.generics import (
     GenericAPIView,
     CreateAPIView,
@@ -6,10 +8,6 @@ from rest_framework.generics import (
     RetrieveAPIView,
     UpdateAPIView
 )
-from rest_framework.permissions import (AllowAny, IsAuthenticated, IsAdminUser)
-from accounts.models import User
-from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
 
 from .serializers import (
     RegisterSerializer, 
@@ -17,8 +15,19 @@ from .serializers import (
     LoginSerializer,
     ActivateSerializer,
     DeactivateSerializer,
-    GenericChangePasswordSerializer
+    GenericChangePasswordSerializer,
+    SendResetPasswordSerializer,
+    ResetPasswordSerializer,
+    VerifyPasswordResetOTPSerializer,
 )
+from rest_framework.permissions import (AllowAny, IsAuthenticated, IsAdminUser)
+from accounts.models import User, OTPVerification
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from rest_framework import status
+from django.utils.timezone import now
+from django.conf import settings
+
 
 class RegisterView(CreateAPIView):
     queryset = User.objects.all()
@@ -96,3 +105,106 @@ class DeactivateAccountView(GenericAPIView):
         request.user.save()
 
         return Response({"message":"Аккаунт деактивирован"}) 
+
+
+
+class RequestPasswordResetView(GenericAPIView):
+    serializer_class = SendResetPasswordSerializer
+    permission_classes = (AllowAny,)
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception = True)
+
+        email = serializer.validated_data.get('email', None)
+
+        if not email:
+            return Response({"message":"Необходимо указать email"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if email and not User.objects.filter(email=email).exits():
+            return Response({"message":" Пользователь с таким именем не найден"}, status=status.HTTP_400_NOT_FOUND)
+        
+        code = str(random.randint(1000, 9999))
+        OTPVerification.objects.update_or_create(
+            email=email,
+            defaults={'code':code, 'created_at':now()}
+        )
+
+        message = f"Ваш код для сброса пароля: {code}"
+
+        if method == "email" and email:
+            response = send_mail(
+                subject="Востановление пароля",
+                message=message,
+                from_email=settings.EMAIL_HOST_USER,
+                recipient_list=[email],
+            )
+
+            if response == 0:
+                return Response({"message":"Неудалось отправить код на email"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({"message":"Код успешно отправлен на email"}, status=status.HTTP_200_OK)
+
+
+
+class VerifyPasswordResetOTPView(GenericAPIView):
+    serializer_class = VerifyPasswordResetOTPSerializer
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception = True)
+        email = serializer.validated_data.get('email', None)
+        code = serializer.validated_data['code']
+
+        try:
+            if email:
+                code_record = OTPVerification.objects.get(email=email, code=code)
+            else:
+                return Response({"message":"Необходимо указать email"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if code_record.is_expired():
+                code_record.delete()
+                return Response({"message":"Срок действий кода истек"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message":"Код успешно проверен"}, status=status.HTTP_200_OK)
+        
+        except OTPVerification.DoesNotExist:
+            return Response({"message":"Неверный код"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class ResetPasswordView(GenericAPIView):
+    serializer_class = ResetPasswordSerializer
+    permission_classes = (AllowAny,)
+
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception = True)
+        email = serializer.validated_data.get('email', None)
+        code = serializer.validated_data['code']
+        new_password = serializer.validated_data['new_password']
+
+        try:
+            if email:
+                code_record = OTPVerification.objects.get(email=email, code=code)
+                user = User.objects.get(email=email)
+            else:
+                return Response({"message":"Необходимо указать email"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            if code_record.is_expired():
+                code_record.delete()
+                return Response({"message":"Срок действий кода истек"}, status=status.HTTP_400_BAD_REQUEST)
+
+            user.set_password(new_password)
+            user.save()
+            code_record.delete()
+
+            return Response({"message":"Код успешно проверен"}, status=status.HTTP_200_OK)
+        
+        except OTPVerification.DoesNotExist:
+            return Response({"message":"Неверный код"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        except User.DoesNotExist:
+            return Response({"message":"Пользователь не найден"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+    
