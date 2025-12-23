@@ -27,6 +27,8 @@ from rest_framework.authtoken.models import Token
 from rest_framework import status
 from django.utils.timezone import now
 from django.conf import settings
+from django.core.mail import send_mail
+import random
 
 
 class RegisterView(CreateAPIView):
@@ -120,7 +122,7 @@ class RequestPasswordResetView(GenericAPIView):
         if not email:
             return Response({"message":"Необходимо указать email"}, status=status.HTTP_400_BAD_REQUEST)
         
-        if email and not User.objects.filter(email=email).exits():
+        if email and not User.objects.filter(email=email).exists():
             return Response({"message":" Пользователь с таким именем не найден"}, status=status.HTTP_400_NOT_FOUND)
         
         code = str(random.randint(1000, 9999))
@@ -131,7 +133,7 @@ class RequestPasswordResetView(GenericAPIView):
 
         message = f"Ваш код для сброса пароля: {code}"
 
-        if method == "email" and email:
+        if email:
             response = send_mail(
                 subject="Востановление пароля",
                 message=message,
