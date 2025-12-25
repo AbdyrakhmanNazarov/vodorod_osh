@@ -11,22 +11,51 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import environ
+import os
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# ========================
+# 1. Подключаем .env
+# ========================
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7y85mah0+vd0@p&*e#yy#8)-*6^ve28ixyg4ajw3@mgz9=sb5)'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+# ========================
+# 2. Основные секреты
+# ========================
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env.bool("DEBUG")
 ALLOWED_HOSTS = ["*"]
 
+# ========================
+# 3. Email
+# ========================
+EMAIL_BACKEND = env('EMAIL_BACKEND')
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')
+EMAIL_PORT = env.int('EMAIL_PORT')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
+
+# ========================
+# 4. Database
+# ========================
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env.int('DB_PORT'),
+    }
+}
 
 # Application definition
 
@@ -177,25 +206,25 @@ AUTH_USER_MODEL = 'accounts.User'
 # DEFAULT_FROM_EMAIL = 'emailforbackandskils@gmail.com'
 
 
-import environ
-import os
+# import environ
+# import os
 
-env = environ.Env(
-    DEBUG=(bool, False)
-)
+# env = environ.Env(
+#     DEBUG=(bool, False)
+# )
 
-# читаем .env файл
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+# # читаем .env файл
+# environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-# Основные секреты
-DEBUG = env.bool("DEBUG")
-SECRET_KEY = env("SECRET_KEY")
+# # Основные секреты
+# DEBUG = env.bool("DEBUG")
+# SECRET_KEY = env("SECRET_KEY")
 
-# Настройки email
-EMAIL_BACKEND = env('EMAIL_BACKEND')
-EMAIL_HOST = env('EMAIL_HOST')
-EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')
-EMAIL_PORT = env.int('EMAIL_PORT')
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
+# # Настройки email
+# EMAIL_BACKEND = env('EMAIL_BACKEND')
+# EMAIL_HOST = env('EMAIL_HOST')
+# EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')
+# EMAIL_PORT = env.int('EMAIL_PORT')
+# EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+# DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')

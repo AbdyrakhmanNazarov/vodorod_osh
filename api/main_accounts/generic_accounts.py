@@ -123,7 +123,7 @@ class RequestPasswordResetView(GenericAPIView):
             return Response({"message":"Необходимо указать email"}, status=status.HTTP_400_BAD_REQUEST)
         
         if email and not User.objects.filter(email=email).exists():
-            return Response({"message":" Пользователь с таким именем не найден"}, status=status.HTTP_400_NOT_FOUND)
+            return Response({"message":" Пользователь с таким именем не найден"}, status=status.HTTP_404_NOT_FOUND)
         
         code = str(random.randint(1000, 9999))
         OTPVerification.objects.update_or_create(
