@@ -1,26 +1,39 @@
-# Виртуальные окружения
-venv/
-env/
-
-# Логи
-*.log
-
-# Git
-.git
-.gitignore
-
-# Настройки IDE
-.vscode/
-.idea/
-
-# Python cache
+# Python кеши
 __pycache__/
 *.pyc
 *.pyo
+*.pyd
 
-# Node.js зависимости (если есть)
-node_modules/
+# Виртуальное окружение
+venv/
+env/
+.venv/
 
-# Секретные файлы
+# Файлы базы данных
+*.sqlite3
+
+# Секреты и переменные окружения
 .env
 .env.*
+
+# Логи
+*.log
+logs/
+*.pot
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile*
+docker-compose.override.yml
+
+# Сборки и временные файлы
+*.swp
+*.swo
+*.DS_Store
+*.egg-info/
+dist/
+build/
+tmp/
