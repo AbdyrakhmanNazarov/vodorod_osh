@@ -1,61 +1,81 @@
-version: "3.9"
+version: '3.9'
 
 services:
+  db2:
+    image: postgres:16
+    env_file:
+      - .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - app
+
+  redis2:
+    image: redis:7-alpine
+    restart: always
+    networks:
+      - app
+
+  adminer2:
+    image: adminer2
+    restart: always
+    depends_on:
+      - db2
+    ports:
+      - "${ADMINER_PORT}:8080"
+    networks:
+      - app
+
   web2:
     build: .
-    container_name: django_web_2
+    command: python manage.py runserver 0.0.0.0:8002
+    env_file:
+      - .env
     volumes:
       - .:/app
     ports:
-      - "8002:8002"
-    env_file:
-      - .env
+      - "${PORT}:8002"
     depends_on:
       - db2
-      - redis
-
-  db2:
-    image: postgres:16
-    container_name: postgres_db_2
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-
-  redis:
-    image: redis:7-alpine
-    container_name: redis_2
-    ports:
-      - "6379:6379"
+      - redis2
+    networks:
+      - app
+    restart: always
 
   celery_worker:
     build: .
-    container_name: celery_worker_2
-    command: sh -c "sleep 5 && celery -A core worker -l info"
-    volumes:
-      - .:/app
+    command: celery -A core worker -l info
     env_file:
       - .env
+    volumes:
+      - .:/app
     depends_on:
-      - web2
-      - redis
+      - db2
+      - redis2
+    networks:
+      - app
+    restart: always
 
   celery_beat:
     build: .
-    container_name: celery_beat_2
-    command: sh -c "sleep 5 && celery -A core beat -l info"
-    volumes:
-      - .:/app
+    command: celery -A core beat -l info
     env_file:
       - .env
+    volumes:
+      - .:/app
     depends_on:
-      - web2
-      - redis
+      - db2
+      - redis2
+    networks:
+      - app
+    restart: always
+
+networks:
+  app:
 
 volumes:
-  postgres_data:
+  pgdata:
 
 
 

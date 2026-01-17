@@ -14,6 +14,7 @@ class User(AbstractUser, PermissionsMixin):
     email = models.EmailField(verbose_name="Электронная почта", unique=True)
     phone_number = PhoneNumberField(verbose_name="Номер телефона", blank=True, null=True)
     full_name = models.CharField(max_length=200, verbose_name="ФИО") 
+    created_at = models.DateTimeField(auto_now_add=True)
 
     objects = UserManager()
     USERNAME_FIELD = "email"

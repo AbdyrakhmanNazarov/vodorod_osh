@@ -1,6 +1,7 @@
 from pathlib import Path
 import environ
 import os
+from decouple import config
 
 # ========================
 # Пути
@@ -156,12 +157,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ========================
 # Celery
 # ========================
-CELERY_BROKER_URL = 'redis://redis:6379/0'
-CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+REDIS_HOST = config('REDIS_HOST', default='127.0.0.1')
+REDIS_PORT = config('REDIS_PORT', default=6379, cast=int)
+
+CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
+CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = 'Asia/Bishkek'
+
+CELERY_TIMEZONE = 'UTC'
+CELERY_ENABLE_UTC = True
+
 
 
 
